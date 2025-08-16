@@ -214,15 +214,37 @@ Configure aws by executing below command
 aws configure
 
 4.5. Install KubeCTL (to interact with K8S)
-curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/kubectl
+
+#!/bin/bash
+# Install kubectl (latest stable release)
+
+# Download the latest stable release
+curl -o kubectl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+# Make it executable
 chmod +x ./kubectl
-sudo mv ./kubectl /usr/local/bin
-kubectl version --short --client
+
+# Move to PATH
+sudo mv ./kubectl /usr/local/bin/
+
+# Verify installation
+kubectl version --client
+
 
 4.6. Install EKS CTL (used to create EKS Cluster)
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl\_$(uname -s)\_amd64.tar.gz" | tar xz -C /tmp
+
+#!/bin/bash
+# Install eksctl (official tool for creating/managing EKS clusters)
+
+# Download the latest eksctl release
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar -xz -C /tmp
+
+# Move binary to PATH
 sudo mv /tmp/eksctl /usr/local/bin
+
+# Verify installation
 eksctl version
+
 
 4.7. Create EKS Cluster
 eksctl create cluster --name kastro-cluster --region us-east-1 --node-type t2.medium --zones us-east-1a,us-east-1b
@@ -548,6 +570,7 @@ TO GET ARGO CD PASSWORD:
 ------------------------------------------
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ----> Copy the password and provide in argo cd console ----> You will see the argo cd console ----> Follow as explained in the video
+
 
 
 
